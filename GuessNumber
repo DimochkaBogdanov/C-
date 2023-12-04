@@ -1,0 +1,107 @@
+// работу выполнили Богданов Дмитрий, Катаргин Михаил
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace GuessNumber
+{
+    public partial class Form1 : Form
+    {
+        int guessNumber; // создаем глобальную переменную для числа, которое загадывает компьютер
+        int movesNumber = 0; // создаем переменную-счетчик шагов пользователя
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e) // данная функция будет реализовывать генерацию числа, которое будет пытаться отгадать пользователь, после загрузки формы
+        {
+            Random random = new Random(); // создаем переменную типа random
+            guessNumber = random.Next(1, 101); // вызываем метод типа next для генерации числа от 1 до 100
+            // в С++ данный элемент реализовывался бы с помощью конструкции a + rand()%(b-a+1), где а = 1, b = 100
+        }
+
+        private void button1_Click(object sender, EventArgs e) // данная функции срабатывает при нажатии пользователем на кнопку "угадать" 
+        {
+            var userInput = UserNumber.Text; // создаем переменную неявной типизации для хранения введенного пользователем числа в виде текста
+
+            UserNumber.Clear(); // очищаем форму пользователя
+            UserNumber.Focus(); // ставим курсор для дальнейшего ввода
+            
+            var parsed = int.TryParse(userInput, out var usernumber); /* делаем преобразование числа пользователя из строкового типа данных в целочисленный
+            и записываем в переменную parsed булевое значение на случай, если пользователь ввел не число а буквы
+            вот как происходит преобразование из строкового типа в целочисленный в C++
+            std::string s = "10"; // здесь мы создали строковую переменную 
+            int i = std::atoi(s.c_str()); // создали целочисленную переменную и поместили туда преоразованную в целое число переменную s
+             */
+            if (!parsed) // если пользователи ввел любые не числовые символы, то мы ему напоминаем, что надо ввести число
+            {
+                verdictLabel.ForeColor = Color.Yellow; // используем методы для изменения цвета текста окна verdictLabel
+                verdictLabel.BackColor = Color.SeaGreen; // используем методы для изменения фона текста окна verdictLabel
+                verdictLabel.Text = $"Введите число!";
+                return;
+            }
+
+            if (!(usernumber >= 1 && usernumber <= 100 )) // если пользоваетель ввел число, которое выходить из отрезка [1;100], то мы ему напоминаем, что надо вводить числа в рамках отрезка
+            {
+                verdictLabel.ForeColor = Color.Yellow;
+                verdictLabel.BackColor = Color.SeaGreen;
+                verdictLabel.Text = $"Введите число от 1 до 100!";
+                return;
+            }
+
+            movesNumber++; // увеличиваем счетчик шагов полльзователя на единицу, данный метод аналогично реализуется и в С++
+
+            if (usernumber == guessNumber) // если пользователь угадал загаданное число
+            {
+                var verdict = $"Ура! Вы угадали за {movesNumber} ходов!"; // создаем переменную verdict для поздравления пользователя и показа количества его ходов 
+                if (movesNumber > 7) // если количество шагов боллее 7, то пользователь играл не оптимально, так как любое загаданное число можно угадать за 7 шагов
+                {
+                    verdict += " Но можно было угадать за 7 ходов!"; // добавляем в строку verdict текст
+                }
+                else // если количество шагов менее 7, то пользователь играл оптимально
+                {
+                    verdict += " Вы играли оптимально!"; // добавляем в строку verdict текст
+                }
+                historydataGridView.Rows.Add(movesNumber, usernumber, "Угадал"); // записываем в нашу таблицу historydataGridView номер последнего хода, введенное число и вердикт
+                MessageBox.Show(verdict); // выводим на экран содержимое переменной verdcit, котоую мы заполняли ранее
+            }
+
+            else // если пользователь ввел неверное число
+            {
+                if (guessNumber > usernumber) // если введенное число оказалось больше загаданного
+                {
+                    var verdict = $"Моё число больше {usernumber}"; // создаем переменную verdict и присваем ей текст с числом, которое ввел пользователь
+                    verdictLabel.Text = verdict; // выводим на экран пользователя содержимое переменной verdict
+                    historydataGridView.Rows.Add(movesNumber, usernumber, ">"); // заполняем таблицу хода игры номером последнего хода, последним введенным числом, знаком неравенства
+                }
+                else // если введенное число оказалось меньше загаданного 
+                {
+                    var verdict = $"Моё число меньше {usernumber}"; //создаем переменную verdict и присваем ей текст с числом, которое ввел пользователь
+                    verdictLabel.Text = verdict; // выводим на экран пользователя содержимое переменной verdict
+                    historydataGridView.Rows.Add(movesNumber, usernumber, "<"); //заполняем таблицу хода игры номером последнего хода, последним введенным числом, знаком неравенства
+                }
+            }
+        }
+        private void перезапускToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void выходToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
