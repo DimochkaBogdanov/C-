@@ -43,7 +43,7 @@ namespace GuessNumber
             и записываем в переменную parsed булевое значение на случай, если пользователь ввел не число а буквы
             вот как происходит преобразование из строкового типа в целочисленный в C++
             std::string s = "10"; // здесь мы создали строковую переменную 
-            int i = std::atoi(s.c_str()); // создали целочисленную переменную и поместили туда преоразованную в целое число переменную s
+            int i = std::atoi(s.c_str()); // создали целочисленную переменную и поместили туда преобразованную в целое число переменную s
              */
             if (!parsed) // если пользователи ввел любые не числовые символы, то мы ему напоминаем, что надо ввести число
             {
@@ -61,12 +61,12 @@ namespace GuessNumber
                 return;
             }
 
-            movesNumber++; // увеличиваем счетчик шагов полльзователя на единицу, данный метод аналогично реализуется и в С++
+            movesNumber++; // увеличиваем счетчик шагов пользователя на единицу, данный метод аналогично реализуется и в С++
 
             if (usernumber == guessNumber) // если пользователь угадал загаданное число
             {
                 var verdict = $"Ура! Вы угадали за {movesNumber} ходов!"; // создаем переменную verdict для поздравления пользователя и показа количества его ходов 
-                if (movesNumber > 7) // если количество шагов боллее 7, то пользователь играл не оптимально, так как любое загаданное число можно угадать за 7 шагов
+                if (movesNumber > 7) // если количество шагов более 7, то пользователь играл не оптимально, так как любое загаданное число можно угадать за 7 шагов
                 {
                     verdict += " Но можно было угадать за 7 ходов!"; // добавляем в строку verdict текст
                 }
@@ -83,25 +83,32 @@ namespace GuessNumber
                 if (guessNumber > usernumber) // если введенное число оказалось больше загаданного
                 {
                     var verdict = $"Моё число больше {usernumber}"; // создаем переменную verdict и присваем ей текст с числом, которое ввел пользователь
+                    verdictLabel.ForeColor = Color.Yellow;
+                    verdictLabel.BackColor = Color.SeaGreen;
                     verdictLabel.Text = verdict; // выводим на экран пользователя содержимое переменной verdict
                     historydataGridView.Rows.Add(movesNumber, usernumber, ">"); // заполняем таблицу хода игры номером последнего хода, последним введенным числом, знаком неравенства
                 }
                 else // если введенное число оказалось меньше загаданного 
                 {
-                    var verdict = $"Моё число меньше {usernumber}"; //создаем переменную verdict и присваем ей текст с числом, которое ввел пользователь
+                    var verdict = $"Моё число меньше {usernumber}"; //создаем переменную verdict и присваиваем ей текст с числом, которое ввел пользователь
+                    verdictLabel.ForeColor = Color.Yellow;
+                    verdictLabel.BackColor = Color.SeaGreen;
                     verdictLabel.Text = verdict; // выводим на экран пользователя содержимое переменной verdict
                     historydataGridView.Rows.Add(movesNumber, usernumber, "<"); //заполняем таблицу хода игры номером последнего хода, последним введенным числом, знаком неравенства
                 }
             }
         }
-        private void перезапускToolStripMenuItem_Click(object sender, EventArgs e)
+        private void перезапускToolStripMenuItem_Click(object sender, EventArgs e) // обработчик события, когда мы нажимаем в меню кнопку перезапуска
         {
-            Application.Restart();
+            Application.Restart();// команда для перезапуска приложения
         }
 
-        private void выходToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void выходToolStripMenuItem1_Click(object sender, EventArgs e) // обрабочик события, когда мы нажимаем в меню кнопку перезапуска 
         {
-            Application.Exit();
+            Application.Exit();// команда выхода из приложения
         }
     }
 }
+
+
+
